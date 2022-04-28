@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>英単語学習アプリ</title>
+  <link rel="stylesheet" href="manage.css">
+</head>
+
+<body>
+
+  <div id="wrap_frame">
+    <header>
+      <h1>英単語学習アプリ</h1>
+    </header>
+
+    <section id="regist_data">
+      <h2>英単語の登録</h2>
+
+      <p>単語集</p>
+      <ul>
+        <li>　単語：<input type="text" id="tango_1"></li>
+        <li>日本語：<input type="text" id="nihongo_1"></li>
+      </ul>
+
+      <ul>
+        <li>　単語：<input type="text" id="tango_2"></li>
+        <li>日本語：<input type="text" id="nihongo_2"></li>
+      </ul>
+
+      <ul>
+        <li>　単語：<input type="text" id="tango_3"></li>
+        <li>日本語：<input type="text" id="nihongo_3"></li>
+      </ul>
+
+
+
+      <button id="regist">登録</button>
+      <button id="clear">削除</button>
+
+    </section>
+
+    <hr>
+    <!--水平線-->
+
+    <table id="learning_data">
+    </table>
+
+    <a href="index.html" id="to_main">メイン画面へ戻る</a>
+
+  </div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+
+<script>
+
+  // データ登録//
+  $("#regist").on("click", function () {  //もしregistをクリックしたら
+    const data = {
+      tango_1: $("#tango_1").val(),     //「単語１」取得
+      nihongo_1: $("#nihongo_1").val(),     //「日本語１」取得
+      tango_2: $("#tango_2").val(),     //「単語２」取得
+      nihongo_2: $("#nihongo_2").val(),     //「日本語２」取得
+      tango_3: $("#tango_3").val(),     //「単語３」取得
+      nihongo_3: $("#nihongo_3").val(),     //「日本語３」取得
+    };
+    console.log(data);                        //console出力
+    const jsonData = JSON.stringify(data);    //変数dataをJSONへ変換
+    console.log(jsonData);                    //console出力
+    localStorage.setItem("tango", jsonData);   //keyはtango、valueはjsonDataでローカルストレージにデータ登録
+  });
+
+  //データ削除//
+  $("#clear").on("click", function () {             //もしclearをクリックしたら
+    localStorage.removeItem("tango");     //tangoキーから登録済の文字列を削除
+    $("#tango_1").val("");                         //「単語１」削除
+    $("#nihongo_1").val("");                         //「日本語１」削除
+    $("#tango_2").val("");                         //「選択肢２」削除
+    $("#nihongo_2").val("");                         //「選択肢３」削除
+    $("#tango_3").val("");                         //「選択肢４」削除
+    $("#nihongo_3").val("");                           //「正解」削除
+  });
+
+  //データ取得//
+  if (localStorage.getItem("tango")) {                  //もしtangoのところのデータが取得出来たら(tangoがnullでなかったら)
+    const jsonData = localStorage.getItem("tango");     //jsonDataに"tango"keyから値を取得
+    console.log(jsonData);                              //console出力
+    const data = JSON.parse(jsonData);                  //jsonから戻す処理
+    console.log(data);                                  //console出力
+    $("#tango_1").val(data.tango_1);                  //dataのquestionプロパティの値の取得
+    $("#nihongo_1").val(data.nihongo_1);                  //dataのselect_1プロパティの値の取得
+    $("#tango_2").val(data.tango_2);                  //dataのselect_2プロパティの値の取得
+    $("#nihongo_2").val(data.nihongo_2);                  //dataのselect_3プロパティの値の取得
+    $("#tango_3").val(data.tango_3);                  //dataのselect_4プロパティの値の取得
+    $("#nihongo_3").val(data.nihongo_3);                      //dataのanswerプロパティの値の取得
+  }
+
+
+
+
+
+
+</script>
+
+</html>
