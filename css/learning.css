@@ -1,103 +1,140 @@
-/* クイズのすべてを管理する親要素 */
+/* 親要素 */
 .quiz_area {
+    /* 子要素を親要素を基準に動けるようにする */
     position: relative;
+    width: 2000px;
+    /* テキスト中央ぞろえ */
+    text-align: center;
+    /* 水平方向の中央揃え */
+    margin: 0 auto;
+    font-size: 50px;
 }
 
-/* 回答後に上に被せてタップできなくするための要素（デフォルト非表示、回答後に一時的に表示） */
-.quiz_area .quiz_area_bg {
+/* 回答後に上に被せる背景の要素（デフォルト非表示、回答後に一時的に表示） */
+.quiz_area_bg {
+    /* 親要素を基準に動けるようにする */
     position: absolute;
     width: 100%;
     height: 100%;
+    /* top,right,leftを0にしないと元の要素に重ならず元の要素の下に出てしまう*/
     top: 0;
     right: 0;
     left: 0;
+    /* 要素の上に重なるようにする*/
     z-index: 999;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(6, 8, 9, 0.553);
+    /* デフォルトは非表示*/
     display: none;
     color: #FFF;
     text-align: center;
 }
 
-/* 画面に〇、×を表示するための要素（デフォルト非表示、回答後に一時的に表示） */
-.quiz_area .quiz_area_icon {
+/* 〇、×を表示の要素（デフォルト非表示、回答後に一時的に表示） */
+.quiz_area_icon {
+    /* 親要素を基準に動けるようにする */
     position: absolute;
+    /*paddingとborderを幅と高さに含める*/
     box-sizing: border-box;
     top: 50%;
     left: 50%;
     z-index: 9999;
+    /*x方向y方向に-50%ずつ移動*/
     transform: translate(-50%, -50%);
-    color: red;
     display: none;
-    font-size: 10em;
+    font-size: 5em;
     font-weight: bold;
-    -webkit-text-stroke: 4px #FFF;
+    -webkit-text-stroke: 5px #FFF;
 }
 
 /* .trueまたは.falseのクラスが付与されたら表示するものとみなす */
-.quiz_area .quiz_area_icon.true,
-.quiz_area .quiz_area_icon.false {
+.quiz_area_icon.true,
+.quiz_area_icon.false {
     display: block;
 }
 
 /* .trueは正解（〇を表示） */
-.quiz_area .quiz_area_icon.true:before {
+.quiz_area_icon.true:before {
     content: '〇';
     color: red;
 }
 
 /* .falseは不正解（×を表示） */
-.quiz_area .quiz_area_icon.false:before {
-    content: '×';
+.quiz_area_icon.false:before {
+    content: '✕';
     color: blue;
 }
 
 /* 現在の問題数を表示 */
-.quiz_area .quiz_no {
+.quiz_no {
     font-weight: bold;
 }
 
-/* 問題文と回答後の結果（デザインは使いまわし） */
-.quiz_area .quiz_question,
+/* 問題文 */
+.quiz_question {
+    box-sizing: border-box;
+    width: 1000px;
+    height: 300px;
+    /* heightと同じ大きさで上下中央に表示 */
+    line-height: 300px;
+    border: 4px solid #000;
+    font-weight: bold;
+    border-radius: 10px;
+    font-size: 2em;
+    margin: 0 auto;
+    margin-top: 30px;
+    background-color: aliceblue;
+}
+
+/* 回答後の結果 */
 .quiz_result {
     box-sizing: border-box;
     padding: 15px;
-    border: 4px solid #CCC;
+    border: 4px solid #000;
     font-weight: bold;
-}
-
-/* 回答後の結果は初期非表示 */
-.quiz_area .quiz_result {
+    /* 回答後の結果は初期非表示 */
     display: none;
     text-align: center;
+    font-size: 2em;
 }
+
 
 
 /* 以下クイズの選択肢のデザイン */
-.quiz_area .quiz_ans_area ul {
-    margin: 10px 0 0 0;
+.quiz_ans_area ul {
+    margin: 50px 0 0 0;
     padding: 0;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 50px;
+    margin-bottom: 100px;
 }
 
-.quiz_area .quiz_ans_area ul::after {
-    content: "";
-    display: block;
-    clear: both;
-}
-
-.quiz_area .quiz_ans_area ul li {
+.quiz_ans_area ul li {
     box-sizing: border-box;
+    width: 800px;
     list-style: none;
-    float: left;
-    width: 100%;
     padding: 10px 15px;
     border: 2px solid #000;
-    margin: 50p 50px -2px 0;
+    margin: 10px;
     cursor: pointer;
-    text-align: center
-        /*文字列中央揃え*/
+    /*文字列中央揃え*/
+    text-align: center;
+    border-radius: 50px;
+    background-color: black;
+    color: #fff;
 }
 
-.quiz_area .quiz_ans_area ul li.selected {
-    background-color: #bcbcbc;
+.quiz_ans_area ul li:hover {
+    background-color: #59b1eb;
+}
+
+/* 選択された選択肢の色の変化 */
+.quiz_ans_area ul li.selected {
+    background-color: #ee93e0;
+}
+
+.quiz_area a {
+    font-size: 30px;
 }

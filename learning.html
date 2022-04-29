@@ -84,7 +84,7 @@
       }
 
       //--------------------------------------------//
-      // 解答選択後1.5秒後にタイムアウトした時の処理//
+      // 解答選択後1秒後にタイムアウトした時の処理//
       //--------------------------------------------// 
       setTimeout(function () {
         //表示を元に戻す
@@ -101,8 +101,8 @@
           //結果表示画面を表示
           quizResult();
         }
-        //1.5秒後に実行
-      }, 1500);
+        //1秒後に実行
+      }, 1000);
     });
 
 
@@ -170,8 +170,8 @@
         text += '<br>全問正解おめでとう！';    //全問正解おめでとうの文言を追加
       }
 
-      text += '<br><a href="learning.html">もう一度挑戦する</a>';//もう一度挑戦するリンク
-      text += '<br><a href="index.html">メイン画面へ戻る</a>';//メニュー画面へのリンク
+      text += '<br><a class="result_link" href="learning.html">もう一度挑戦する</a>';//もう一度挑戦するリンク
+      text += '<br><a class="result_link" href="index.html">メイン画面へ戻る</a>';//メニュー画面へのリンク
 
       quizArea.find('.quiz_result').html(text); //textをhtmlとして書き出し
       quizArea.find('.quiz_result').show();     //結果画面の表示
