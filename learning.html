@@ -6,135 +6,147 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>英単語学習アプリ</title>
-  <link rel="stylesheet" href="learning.css">
+  <link rel="stylesheet" href="css/learning.css">
 </head>
 
-<body>
 
+<body>
   <div class="quiz_area">
     <div class="quiz_set">
       第<span class="quiz_no">0</span>問
-      <div class="quiz_question"></div>
       <!--問題文-->
+      <div class="quiz_question"></div>
+      <!--回答（4択表示）-->
       <div class="quiz_ans_area">
-        <!--回答（4択表示）-->
         <ul></ul>
       </div>
-      <div class="quiz_area_bg"></div>
       <!--回答選択後の画面を暗くする背景-->
-      <div class="quiz_area_icon"></div>　
+      <div class="quiz_area_bg"></div>
       <!--〇×-->
+      <div class="quiz_area_icon"></div>
+      <a href="index.html">メイン画面へ戻る</a>
     </div>
     <div class="quiz_result"></div>
   </div>
-
 </body>
 
 
-
-<!--jQuery-->
+<!--jQuery読み込み-->
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js?ver=1.12.4'></script>
 <!--ここからjs記述-->
 <script>
   $(function () {
-    var quizArea = $('.quiz_area'); //クイズを管理するDOMを指定
-    var quiz_html = quizArea.html(); //もう一度　を押した時に元に戻すため初期HTMLを変数で保管 .htmlで指定した要素の中身のhtmlを取得する（今回はDOMに対して行っているので初期のすべてのhtmlを取得できる）
+    var quizArea = $(".quiz_area"); //クイズを管理するDOMを指定
+    var quiz_html = quizArea.html(); //もう一度を押した時に元に戻すため初期HTMLを変数で保管 
+    //.htmlで指定した要素の中身のhtmlを取得する（今回はDOMに対して行っているので初期のすべてのhtmlを取得できる）
 
     var quiz_cnt = 0; //現在の問題数を管理（初期値0）
     var quiz_fin_cnt = 5; //何問で終了か設定（クイズ数以下であること）
     var quiz_success_cnt = 0; //問題の正解数（初期値0）
 
-    //クイズの配列を設定
-    //answerの選択肢の数はいくつでもOK　
-    //先頭を正解とすること(出題時に選択肢はシャッフルされる)
-    var aryQuiz = [];       //配列aryQuizを設定
-    aryQuiz.push(           //aryQuizに配列を追加
-      {
-        question: 'apple',
-        answer: ['りんご', 'ばなな', 'みかん', 'ぶどう']
-      }
-      , {
-        question: 'banana',
-        answer: ['りんご', 'ばなな', 'みかん', 'ぶどう']
-      }
-      , {
-        question: 'grape',
-        answer: ['りんご', 'ばなな', 'みかん', 'ぶどう']
-      }
-      , {
-        question: 'orange',
-        answer: ['りんご', 'ばなな', 'みかん', 'ぶどう']
-      }
-      , {
-        question: 'strawberry',
-        answer: ['りんご', 'ばなな', 'みかん', 'ぶどう']
-      }
-    );
+    //------------------------------//
+    //管理画面で取得したデータの取得//
+    //------------------------------//
+    if (localStorage.getItem("aryQuiz")) {                  //もしaryQuizのところのデータが取得出来たら(aryQuizがnullでなかったら)
+      const jsonData = localStorage.getItem("aryQuiz");     //jsonDataに"aryQuiz"keyから値を取得
+      console.log(jsonData);                              //console出力
+      var aryQuiz = JSON.parse(jsonData);                  //jsonから戻す処理
+      console.log(aryQuiz);                                  //console出力
+    }
+
+    //---------------//
+    // 問題をリセット//
+    //---------------// 
 
     quizReset();
 
-    //回答を選択した後の処理
+    //-----------------------//
+    // 回答を選択した後の処理//
+    //-----------------------// 
     quizArea.on('click', '.quiz_ans_area ul li', function () {
       //画面を暗くするボックスを表示（上から重ねて、結果表示中は選択肢のクリックやタップを封じる
-      quizArea.find('.quiz_area_bg').show(); //quizArea要素から.quiz_area_bgを探し表示
+      //解説//quizArea要素から.quiz_area_bgを探し表示
+      quizArea.find('.quiz_area_bg').show();
       //選択した回答に色を付ける
-      $(this).addClass('selected'); //$(this):クリックした要素の取得,.addClass('selected'):selectedクラスを追加
-      if ($(this).data('true')) {     //dataで要素属性を取得しtrueだった場合
-        //正解の処理 〇を表示
+      //解説//$(this):クリックした要素の取得,.addClass('selected'):selectedクラスを追加
+      $(this).addClass('selected');
+      //dataで要素属性を取得しtrueだった場合
+      if ($(this).data('true')) {
+        //正解の処理(〇を表示)
         quizArea.find('.quiz_area_icon').addClass('true'); //.quiz_area_icon要素にtrueクラスを追加
         //正解数をカウント
-        quiz_success_cnt++; //++は1を加算すること
+        //解説//++は1を加算すること
+        quiz_success_cnt++;
       } else {
         //不正解の処理（×を表示）
-        quizArea.find('.quiz_area_icon').addClass('false');//.quiz_area_icon要素にfalseクラスを追加
+        //解説//.quiz_area_icon要素にfalseクラスを追加
+        quizArea.find('.quiz_area_icon').addClass('false');
       }
 
-      setTimeout(function () {        //タイムアウトしたら
+      //--------------------------------------------//
+      // 解答選択後1.5秒後にタイムアウトした時の処理//
+      //--------------------------------------------// 
+      setTimeout(function () {
         //表示を元に戻す
         quizArea.find('.quiz_ans_area ul li').removeClass('selected');//selectedクラス削除
         quizArea.find('.quiz_area_icon').removeClass('true false');//true,falseクラス削除
         quizArea.find('.quiz_area_bg').hide(); //.quiz_area_bgの非表示
         //問題のカウントを進める
         quiz_cnt++;  //問題カウント+1
-        if (quiz_fin_cnt > quiz_cnt) {   //上限クイズ数の方が大きかったら
-          //次の問題を設定する
+        //上限クイズ数の方が大きかったら
+        if (quiz_fin_cnt > quiz_cnt) {
+          //次の問題を表示
           quizShow();
         } else {
           //結果表示画面を表示
           quizResult();
         }
-
-      }, 1500); //1.5秒後に実行
+        //1.5秒後に実行
+      }, 1500);
     });
 
-    //もう一度挑戦するを押した時の処理
+
+    //---------------------------------//
+    // もう一度挑戦するを押した時の処理//
+    //---------------------------------// 
     quizArea.on('click', '.quiz_restart', function () {
-      quizReset(); //問題をリセットする関数
+      //問題をリセットする関数
+      quizReset();
     });
 
-    //リセットを行う関数
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+    // 問題のリセットを行う関数の作成//
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
     function quizReset() {
-      quizArea.html(quiz_html); //表示を元に戻す
+      //表示を元に戻す
+      quizArea.html(quiz_html);
+      //クイズカウントを０に
       quiz_cnt = 0;
+      //正解数も０に
       quiz_success_cnt = 0;
-      //aryQuiz = arrShuffle(aryQuiz); //毎回出題の順番をシャッフルしたい場合はここのコメントを消してね
-      quizShow(); //問題を表示させる関数
+      //問題を表示させる関数
+      quizShow();
     }
 
-    //問題を表示する関数
+    //~~~~~~~~~~~~~~~~~~~~~~~~~//
+    // 問題を表示する関数の作成//
+    //~~~~~~~~~~~~~~~~~~~~~~~~~//
     function quizShow() {
       //何問目かを表示
       quizArea.find('.quiz_no').text((quiz_cnt + 1));
       //問題文を表示
-      quizArea.find('.quiz_question').text(aryQuiz[quiz_cnt]['question']);　//配列のクイズ数番目のquestionキーの中身を表示
-      //正解の回答を取得する
-      var success = aryQuiz[quiz_cnt]['answer'][0]; //配列のクイズ数番目のanswerキーの中身を0番目とする？？？
+      //解説//配列のクイズ数番目のquestionキーの中身を表示
+      quizArea.find('.quiz_question').text(aryQuiz[quiz_cnt]['question']);
+      //正解の選択肢を取得する
+      //解説//配列のクイズ数番目のanswerキーの1番目の値（1番目の選択肢）とする
+      var success = aryQuiz[quiz_cnt]['answer'][0];
+
       //現在の選択肢表示を削除する
-      quizArea.find('.quiz_ans_area ul').empty(); //empty:要素の中身を、テキストも含めて空にする
+      //解説//empty:要素の中身を、テキストも含めて空にする
+      quizArea.find('.quiz_ans_area ul').empty();
 
-      //問題文の選択肢をシャッフルさせる(自作関数) .concat()は参照渡し対策
-      var aryHoge = arrShuffle(aryQuiz[quiz_cnt]['answer'].concat());
-
+      //選択肢の再作成
+      var aryHoge = aryQuiz[quiz_cnt]['answer'];//aryquizの〇問目のanswerキーを格納
       //問題文の配列を繰り返し表示する
       $.each(aryHoge, function (key, value) {
         var fuga = '<li>' + value + '</li>';
@@ -142,54 +154,31 @@
         if (success === value) {
           fuga = '<li data-true="1">' + value + '</li>';
         }
+        //解答エリアにvalueの値を追加する
+        //.apend(content):各要素に引数で指定したコンテンツを追加する
         quizArea.find('.quiz_ans_area ul').append(fuga);
       });
     }
 
-    //結果を表示する関数
+    //~~~~~~~~~~~~~~~~~~~~~~~~~//
+    // 結果を表示する関数の作成//
+    //~~~~~~~~~~~~~~~~~~~~~~~~~//
     function quizResult() {
-      quizArea.find('.quiz_set').hide();
-      var text = quiz_fin_cnt + '問中' + quiz_success_cnt + '問正解！';
-      if (quiz_fin_cnt === quiz_success_cnt) {
-        text += '<br>全問正解おめでとう！';
+      quizArea.find('.quiz_set').hide();  //問題を表示していたエリアを削除する
+      var text = quiz_fin_cnt + '問中' + quiz_success_cnt + '問正解！'; //〇問中〇問正解
+      if (quiz_fin_cnt === quiz_success_cnt) { //もし問題数＝正解数だったら
+        text += '<br>全問正解おめでとう！';    //全問正解おめでとうの文言を追加
       }
-      text += '<br><input type="button" value="もう一度挑戦する" class="quiz_restart p-10">';
-      quizArea.find('.quiz_result').html(text);
-      quizArea.find('.quiz_result').show();
+
+      text += '<br><a href="learning.html">もう一度挑戦する</a>';//もう一度挑戦するリンク
+      text += '<br><a href="index.html">メイン画面へ戻る</a>';//メニュー画面へのリンク
+
+      quizArea.find('.quiz_result').html(text); //textをhtmlとして書き出し
+      quizArea.find('.quiz_result').show();     //結果画面の表示
     }
 
-    //配列をシャッフルする関数
-    function arrShuffle(arr) {
-      for (i = arr.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var tmp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = tmp;
-      }
-      return arr;
-    }
   });
 
-  //データ取得//
-  if (localStorage.getItem("tango")) {                  //もしtangoのところのデータが取得出来たら(tangoがnullでなかったら)
-    const jsonData = localStorage.getItem("tango");     //jsonDataに"tango"keyから値を取得
-    console.log(jsonData);                              //console出力
-    const data = JSON.parse(jsonData);                  //jsonから戻す処理
-    console.log(data);                                  //console出力
-    $("#tango_1").val(data.tango_1);                  //dataのquestionプロパティの値の取得
-    $("#nihongo_1").val(data.nihongo_1);                  //dataのselect_1プロパティの値の取得
-    $("#tango_2").val(data.tango_2);                  //dataのselect_2プロパティの値の取得
-    $("#nihongo_2").val(data.nihongo_2);                  //dataのselect_3プロパティの値の取得
-    $("#tango_3").val(data.tango_3);                  //dataのselect_4プロパティの値の取得
-    $("#nihongo_3").val(data.nihongo_3);                      //dataのanswerプロパティの値の取得
-
-  }
-
-
 </script>
-
-
-
-
 
 </html>

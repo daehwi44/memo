@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>英単語学習アプリ</title>
-  <link rel="stylesheet" href="manage.css">
+  <link rel="stylesheet" href="css/manage.css">
 </head>
 
 <body>
 
-  <div id="wrap_frame">
+  <div>
     <header>
       <h1>英単語学習アプリ</h1>
     </header>
@@ -19,36 +19,56 @@
     <section id="regist_data">
       <h2>英単語の登録</h2>
 
-      <p>単語集</p>
+      <p>問題の設定</p>
       <ul>
-        <li>　単語：<input type="text" id="tango_1"></li>
-        <li>日本語：<input type="text" id="nihongo_1"></li>
+        <li>問題：<input type="text" id="question_1"></li>
+        <li>答え：<input type="text" id="nihongo_1_1"></li>
+        <li>答え：<input type="text" id="nihongo_1_2"></li>
+        <li>答え：<input type="text" id="nihongo_1_3"></li>
+        <li>答え：<input type="text" id="nihongo_1_4"></li>
       </ul>
 
       <ul>
-        <li>　単語：<input type="text" id="tango_2"></li>
-        <li>日本語：<input type="text" id="nihongo_2"></li>
+        <li>問題：<input type="text" id="question_2"></li>
+        <li>答え：<input type="text" id="nihongo_2_1"></li>
+        <li>答え：<input type="text" id="nihongo_2_2"></li>
+        <li>答え：<input type="text" id="nihongo_2_3"></li>
+        <li>答え：<input type="text" id="nihongo_2_4"></li>
       </ul>
 
       <ul>
-        <li>　単語：<input type="text" id="tango_3"></li>
-        <li>日本語：<input type="text" id="nihongo_3"></li>
+        <li>問題：<input type="text" id="question_3"></li>
+        <li>答え：<input type="text" id="nihongo_3_1"></li>
+        <li>答え：<input type="text" id="nihongo_3_2"></li>
+        <li>答え：<input type="text" id="nihongo_3_3"></li>
+        <li>答え：<input type="text" id="nihongo_3_4"></li>
       </ul>
 
+      <ul>
+        <li>問題：<input type="text" id="question_4"></li>
+        <li>答え：<input type="text" id="nihongo_4_1"></li>
+        <li>答え：<input type="text" id="nihongo_4_2"></li>
+        <li>答え：<input type="text" id="nihongo_4_3"></li>
+        <li>答え：<input type="text" id="nihongo_4_4"></li>
+      </ul>
 
+      <ul>
+        <li>問題：<input type="text" id="question_5"></li>
+        <li>答え：<input type="text" id="nihongo_5_1"></li>
+        <li>答え：<input type="text" id="nihongo_5_2"></li>
+        <li>答え：<input type="text" id="nihongo_5_3"></li>
+        <li>答え：<input type="text" id="nihongo_5_4"></li>
+      </ul>
 
       <button id="regist">登録</button>
       <button id="clear">削除</button>
 
     </section>
 
-    <hr>
     <!--水平線-->
+    <hr>
 
-    <table id="learning_data">
-    </table>
-
-    <a href="index.html" id="to_main">メイン画面へ戻る</a>
+    <a href="index.html">メイン画面へ戻る</a>
 
   </div>
 </body>
@@ -59,49 +79,107 @@
 
   // データ登録//
   $("#regist").on("click", function () {  //もしregistをクリックしたら
-    const data = {
-      tango_1: $("#tango_1").val(),     //「単語１」取得
-      nihongo_1: $("#nihongo_1").val(),     //「日本語１」取得
-      tango_2: $("#tango_2").val(),     //「単語２」取得
-      nihongo_2: $("#nihongo_2").val(),     //「日本語２」取得
-      tango_3: $("#tango_3").val(),     //「単語３」取得
-      nihongo_3: $("#nihongo_3").val(),     //「日本語３」取得
-    };
-    console.log(data);                        //console出力
-    const jsonData = JSON.stringify(data);    //変数dataをJSONへ変換
+    const aryQuiz = [
+      {
+        question: $("#question_1").val(),
+        answer: [$("#nihongo_1_1").val(), $("#nihongo_1_2").val(), $("#nihongo_1_3").val(), $("#nihongo_1_4").val()]
+      },
+      {
+        question: $("#question_2").val(),
+        answer: [$("#nihongo_2_1").val(), $("#nihongo_2_2").val(), $("#nihongo_2_3").val(), $("#nihongo_2_4").val()]
+      },
+      {
+        question: $("#question_3").val(),
+        answer: [$("#nihongo_3_1").val(), $("#nihongo_3_2").val(), $("#nihongo_3_3").val(), $("#nihongo_3_4").val()]
+      },
+      {
+        question: $("#question_4").val(),
+        answer: [$("#nihongo_4_1").val(), $("#nihongo_4_2").val(), $("#nihongo_4_3").val(), $("#nihongo_4_4").val()]
+      },
+      {
+        question: $("#question_5").val(),
+        answer: [$("#nihongo_5_1").val(), $("#nihongo_5_2").val(), $("#nihongo_5_3").val(), $("#nihongo_5_4").val()]
+      },
+    ];
+    console.log(aryQuiz);                        //console出力
+    const jsonData = JSON.stringify(aryQuiz);    //変数aryQuizをJSONへ変換
     console.log(jsonData);                    //console出力
-    localStorage.setItem("tango", jsonData);   //keyはtango、valueはjsonDataでローカルストレージにデータ登録
+    localStorage.setItem("aryQuiz", jsonData);   //keyはaryQuiz、valueはjsonDataでローカルストレージにデータ登録
+
   });
 
   //データ削除//
   $("#clear").on("click", function () {             //もしclearをクリックしたら
-    localStorage.removeItem("tango");     //tangoキーから登録済の文字列を削除
-    $("#tango_1").val("");                         //「単語１」削除
-    $("#nihongo_1").val("");                         //「日本語１」削除
-    $("#tango_2").val("");                         //「選択肢２」削除
-    $("#nihongo_2").val("");                         //「選択肢３」削除
-    $("#tango_3").val("");                         //「選択肢４」削除
-    $("#nihongo_3").val("");                           //「正解」削除
+    localStorage.removeItem("aryQuiz");     //aryQuizキーから登録済の文字列を削除
+    $("#question_1").val("");
+    $("#nihongo_1_1").val("");
+    $("#nihongo_1_2").val("");
+    $("#nihongo_1_3").val("");
+    $("#nihongo_1_4").val("");
+
+    $("#question_2").val("");
+    $("#nihongo_2_1").val("");
+    $("#nihongo_2_2").val("");
+    $("#nihongo_2_3").val("");
+    $("#nihongo_2_4").val("");
+
+    $("#question_3").val("");
+    $("#nihongo_3_1").val("");
+    $("#nihongo_3_2").val("");
+    $("#nihongo_3_3").val("");
+    $("#nihongo_3_4").val("");
+
+    $("#question_4").val("");
+    $("#nihongo_4_1").val("");
+    $("#nihongo_4_2").val("");
+    $("#nihongo_4_3").val("");
+    $("#nihongo_4_4").val("");
+
+    $("#question_5").val("");
+    $("#nihongo_5_1").val("");
+    $("#nihongo_5_2").val("");
+    $("#nihongo_5_3").val("");
+    $("#nihongo_5_4").val("");
   });
 
   //データ取得//
-  if (localStorage.getItem("tango")) {                  //もしtangoのところのデータが取得出来たら(tangoがnullでなかったら)
-    const jsonData = localStorage.getItem("tango");     //jsonDataに"tango"keyから値を取得
+  if (localStorage.getItem("aryQuiz")) {                  //もしaryQuizのところのデータが取得出来たら(aryQuizがnullでなかったら)
+    const jsonData = localStorage.getItem("aryQuiz");     //jsonDataに"aryQuiz"keyから値を取得
     console.log(jsonData);                              //console出力
-    const data = JSON.parse(jsonData);                  //jsonから戻す処理
-    console.log(data);                                  //console出力
-    $("#tango_1").val(data.tango_1);                  //dataのquestionプロパティの値の取得
-    $("#nihongo_1").val(data.nihongo_1);                  //dataのselect_1プロパティの値の取得
-    $("#tango_2").val(data.tango_2);                  //dataのselect_2プロパティの値の取得
-    $("#nihongo_2").val(data.nihongo_2);                  //dataのselect_3プロパティの値の取得
-    $("#tango_3").val(data.tango_3);                  //dataのselect_4プロパティの値の取得
-    $("#nihongo_3").val(data.nihongo_3);                      //dataのanswerプロパティの値の取得
+    const aryQuiz = JSON.parse(jsonData);                  //jsonから戻す処理
+    console.log(aryQuiz);                                  //console出力
+
+    $("#question_1").val(aryQuiz[0].question);
+    $("#nihongo_1_1").val(aryQuiz[0].answer[0]);
+    $("#nihongo_1_2").val(aryQuiz[0].answer[1]);
+    $("#nihongo_1_3").val(aryQuiz[0].answer[2]);
+    $("#nihongo_1_4").val(aryQuiz[0].answer[3]);
+
+    $("#question_2").val(aryQuiz[1].question);
+    $("#nihongo_2_1").val(aryQuiz[1].answer[0]);
+    $("#nihongo_2_2").val(aryQuiz[1].answer[1]);
+    $("#nihongo_2_3").val(aryQuiz[1].answer[2]);
+    $("#nihongo_2_4").val(aryQuiz[1].answer[3]);
+
+    $("#question_3").val(aryQuiz[2].question);
+    $("#nihongo_3_1").val(aryQuiz[2].answer[0]);
+    $("#nihongo_3_2").val(aryQuiz[2].answer[1]);
+    $("#nihongo_3_3").val(aryQuiz[2].answer[2]);
+    $("#nihongo_3_4").val(aryQuiz[2].answer[3]);
+
+    $("#question_4").val(aryQuiz[3].question);
+    $("#nihongo_4_1").val(aryQuiz[3].answer[0]);
+    $("#nihongo_4_2").val(aryQuiz[3].answer[1]);
+    $("#nihongo_4_3").val(aryQuiz[3].answer[2]);
+    $("#nihongo_4_4").val(aryQuiz[3].answer[3]);
+
+    $("#question_5").val(aryQuiz[4].question);
+    $("#nihongo_5_1").val(aryQuiz[4].answer[0]);
+    $("#nihongo_5_2").val(aryQuiz[4].answer[1]);
+    $("#nihongo_5_3").val(aryQuiz[4].answer[2]);
+    $("#nihongo_5_4").val(aryQuiz[4].answer[3]);
+
   }
-
-
-
-
-
 
 </script>
 
